@@ -1,0 +1,120 @@
+/* VideoDetails.scss */
+// .video-details {
+//     display: flex;
+//     flex-direction: column;
+//     padding: 20px;
+  
+//     .video-player {
+//       iframe {
+//         width: 100%;
+//         max-width: 800px;
+//         height: 450px;
+//         border: none;
+//       }
+//     }
+  
+//     .video-info {
+//       padding: 20px;
+//       background-color: #fff;
+//       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+//       margin-top: 20px;
+  
+//       h1 {
+//         font-size: 24px;
+//         margin-bottom: 10px;
+//       }
+  
+//       .video-meta {
+//         display: flex;
+//         justify-content: space-between;
+//         color: #888;
+  
+//         .author {
+//           flex: 1;
+//           margin-right: 10px;
+//         }
+  
+//         .views {
+//           flex: 1;
+//           margin-right: 10px;
+//         }
+  
+//         .date {
+//           flex: 1;
+//         }
+//       }
+  
+//       .description {
+//         font-size: 16px;
+//         margin-top: 20px;
+//       }
+//     }
+  
+//     .comments {
+//       margin-top: 20px;
+  
+//       h2 {
+//         font-size: 20px;
+//       }
+  
+//       .comment {
+//         margin-top: 10px;
+//         display: flex;
+  
+//         .user {
+//           font-weight: bold;
+//           margin-right: 10px;
+//         }
+  
+//         .text {
+//           flex: 1;
+//         }
+//       }
+//     }
+//   }
+/* VideoDetails.scss */
+.video-details {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 80px;
+    }
+  
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+  
+    td {
+      vertical-align: middle;
+    }
+  
+    img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover; /* Maintain aspect ratio and cover the entire thumbnail */
+    }
+  
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  
+    /* Style for the "Blocked" button */
+    button.blocked {
+      background-color: #dc3545;
+    }
+  }
+  
+  

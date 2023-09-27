@@ -1,0 +1,35 @@
+.Container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 56px);
+    .Wrapper{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px 50px;
+        gap: 10px;
+        .Title{
+            font-size: 24px;
+        }
+        .SubTitle{
+            font-size: 20px;
+            font-weight: 300;
+        }
+        .Input{
+            border-radius: 3px;
+            padding: 10px;
+            background-color: transparent;
+            width: 100%;
+        }
+        .Button{
+            border-radius: 3px;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            background-color:lightblue;
+        }
+    }
+}

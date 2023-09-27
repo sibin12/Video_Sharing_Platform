@@ -1,0 +1,30 @@
+/* CustomTableStyles.css */
+.user-container{
+    /* z-index: -999; */
+    margin-top: 50px;
+    position: sticky;
+    top: 50px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 50px;
+}
+/* Change table header background color */
+.dataTable thead th {
+    background-color: #007BFF;
+    margin-top: 60px;
+    color: #fff;
+  }
+  
+  /* Change table row background color on hover */
+  .dataTable tbody tr:hover {
+    background-color: #ddd;
+  }
+  
+  /* Customize pagination styles */
+  .pagination {
+    margin-top: 10px;
+  }
+  
+  /* Add any other custom styles you need */
+  
