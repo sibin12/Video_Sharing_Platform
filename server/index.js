@@ -42,13 +42,13 @@ app.use(express.static(path.join(__dirname,'public')))
 
 app.use('/images',express.static('/public/images/profile'))
 
-app.use('/auth' , authRouter)
-app.use('/video',videoRouter)
-app.use('/users',userRouter)
-app.use("/comments", commentRouter);
-app.use('/admin',adminRouter)
-app.use('/chat',chatRouter)
-app.use('/message',messageRouter)
+app.use('/api/auth' , authRouter)
+app.use('/api/video',videoRouter)
+app.use('/api/users',userRouter)
+app.use("/api/comments", commentRouter);
+app.use('/api/admin',adminRouter)
+app.use('/api/chat',chatRouter)
+app.use('/api/message',messageRouter)
 
 
 

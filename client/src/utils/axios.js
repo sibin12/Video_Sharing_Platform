@@ -3,42 +3,42 @@ const token = localStorage.getItem('token');
 const adminToken = localStorage.getItem('admintoken')
 
 const userInstance = axios.create({
-    baseURL:"http://localhost:5000/users",
+    baseURL:"http://localhost:5000/api/users",
 })
 
 const authInstance = axios.create({
-    baseURL:"http://localhost:5000/auth",
+    baseURL:"http://localhost:5000/api/auth",
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
     },
 })
 const videoInstance = axios.create({
-    baseURL:"http://localhost:5000/video",
+    baseURL:"http://localhost:5000/api/video",
 
 })
 const commentInstance = axios.create({
-    baseURL:"http://localhost:5000/comments",
+    baseURL:"http://localhost:5000/api/comments",
 
 })
 
 const chatInstance = axios.create({
-    baseURL:"http://localhost:5000/chat",
+    baseURL:"http://localhost:5000/api/chat",
 })
 
 const messageInstance = axios.create({
-    baseURL:"http://localhost:5000/message",
+    baseURL:"http://localhost:5000/api/message",
 })
 
 const adminAuthInstance = axios.create({
-    baseURL:"http://localhost:5000/admin",
+    baseURL:"http://localhost:5000/api/admin",
    
     headers: {
         Accept:"application/json"
     }
 })
 const adminInstance = axios.create({
-    baseURL:"http://localhost:5000/admin",
+    baseURL:"http://localhost:5000/api/admin",
 
 })
 
