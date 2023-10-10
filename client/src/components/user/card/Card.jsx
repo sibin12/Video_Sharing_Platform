@@ -4,7 +4,8 @@ import { styled } from 'styled-components'
 import loop from '../../../assets/loop.png'
 import {format} from "timeago.js";
 import { userInstance, videoInstance } from '../../../utils/axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { togglee } from '../../../redux/authSlice';
 
 
 const Container = styled.div`
@@ -25,6 +26,8 @@ width: 100%;
 height: ${(props)=> props.type === "sm" ? "120px" : "180px"};
 background-color:grey;
 border-radius:10px;
+box-shadow: 5px 3px 3px rgba(0, 0, 0.3, 0.3);
+
 `;
 
 const Details = styled.div`
@@ -65,23 +68,17 @@ color: ${({theme})=>theme.text}
 
 function Card({type , video}) {
   const block = useSelector((state)=>state.video.block)
+  const toggle =useSelector((state)=> state.auth.toggle)
+
   // const [user, setUser]=useState({})
   const {user}= useSelector((state)=>state.auth)
-
-
-  // useEffect(()=>{
-  //   userInstance.get(`/find/${video?.userId}`)
-  //   .then((res)=>{
-      
-  //     setUser(res.data)
-  //   })
-  //   .catch((err)=>{
-  //     console.log(err.message);
-  //   })
-  // },[])
+  const dispatch = useDispatch()
 
 
   const handleViews =()=>{
+    if (toggle){
+      dispatch(togglee())
+    } 
      if(user){
        videoInstance.put( `/view/${video._id}`,{userId : user._id})
        .then((res)=>{
@@ -104,7 +101,7 @@ function Card({type , video}) {
      <Details  type={type}>
       <UserImage type={type} src={`http://localhost:5000/images/profile/${video?.userId?.image}`} />
       <Texts>
-        <Title>{video?.title}</Title>
+        <Title>{video?.title.substring(0,20)}</Title>
         <UserName>{video?.userId?.username}</UserName>
         <Info>{video?.views?.length} views   • {format(video?.createdAt)}</Info>
       </Texts>

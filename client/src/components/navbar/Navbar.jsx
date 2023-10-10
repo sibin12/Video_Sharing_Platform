@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DehazeOutlinedIcon from '@mui/icons-material/DehazeOutlined';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import loopnet from '../../assets/loop.png'
-import { logout, toggle } from '../../redux/authSlice'
+import { logout, togglee } from '../../redux/authSlice'
 import './Navbar.scss'
 import { Link, useNavigate } from 'react-router-dom';
 import RegisterModal from '../../pages/user/modal/RegisterModal';
@@ -19,6 +19,7 @@ const Container = styled.div`
 position: fixed;
 width:100%;
 top: 0;
+// background-color:${({theme}) =>theme.text};
 background-color:whitesmoke;
 height: 56px;
  
@@ -53,6 +54,7 @@ display:flex;
 align-items: center;
 margin-top:10px;
 cursor:pointer;
+color:${({theme})=> theme.text};
 `;
 
 const Search = styled.div`
@@ -159,7 +161,7 @@ function Navbar() {
   };
   const toggleMenu = () => {
     console.log("hi");
-    dispatch(toggle())
+    dispatch(togglee())
 
   };
 

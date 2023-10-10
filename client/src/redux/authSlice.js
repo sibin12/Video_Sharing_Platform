@@ -27,7 +27,7 @@ export const authSlice = createSlice({
         updateUser(state,action){
           state.user = action.payload
         },
-        toggle:(state)=>{
+        togglee:(state)=>{
             return {
                 ...state,
                 toggle: !state.toggle
@@ -35,40 +35,25 @@ export const authSlice = createSlice({
         }  ,
         subscription: (state, action) => {
             if (state.user) {
-              if (!state.user.subscribedUsers) {
-                state.user.subscribedUsers = [];
+              if (!state.user.subscribedUser) {
+                state.user.subscribedUser = [];
               }
-              const isSubscribed = state.user.subscribedUsers.includes(action.payload);
+              const isSubscribed = state.user.subscribedUser.includes(action.payload);
           
               if (isSubscribed) {
-                state.user.subscribedUsers = state.user.subscribedUsers.filter(
+                state.user.subscribedUser = state.user.subscribedUser.filter(
                   (userId) => userId !== action.payload
                 );
               } else {
-                state.user.subscribedUsers.push(action.payload);
+                state.user.subscribedUser.push(action.payload);
               }
             }
           },
           
-          
-        // subscription: (state, action) => {
-        //     console.log(state.user,"userdetail redux");
-        //     console.log(action.payload,"kolladda");
-        //     if (state.user?.subscribedUsers?.includes(action.payload)) {
-        //       state.user?.subscribedUsers.splice(
-        //         state.user?.subscribedUsers.findIndex(
-        //           (userId) => userId === action.payload
-        //         ),
-        //         1
-        //       );
-        //     } else {
-        //       state.user?.subscribedUsers?.push(action.payload);
-        //     //   console.log(user?.subscribedUsers,"😍😍😍😍");
-        //     }
-        //   },
+       
     }
 })
 
-export const {login, register, updateUser, logout , toggle ,subscription} = authSlice.actions
+export const {login, register, updateUser, logout , togglee ,subscription} = authSlice.actions
 
 export default authSlice.reducer

@@ -57,20 +57,9 @@ export const addView = async (req, res, next) => {
 
 export const random = async (req, res, next) => {
   try {
-   const query = Video.aggregate([
-    { $match: { isBlocked: false } }, 
-    { $sample: { size: 40 } } 
-  ]);
-  
-  // Use Mongoose's .exec() to execute the query and apply population
-  const videos = await query
-    .exec()
-    .then((result) => {
-      return Video.populate(result, {
-        path: "userId",
-        select: "username image email subscribers",
-      });
-    });
+ 
+  const videos = await  Video.find({isBlocked :false})
+  .populate("userId", "username image email subscribers")
     res.status(200).json(videos);
   } catch (err) {
     next(err);
@@ -174,23 +163,31 @@ export const sub = async (req, res, next) => {
      console.log("Please subscribe to any user")
     }
 
-    const subscribedVideos = await Promise.all(
+    const list = await Promise.all(
       subscribedUserList.map(async (userID) => {
-        return await Video.find({ userId: userID }).populate("userId", "username image email subscribers");
+        return await Video.find({ userId: userID }).populate("userId", "username image email subscribers")
       })
     );
 
-    const allVideosExceptSubscribed = await Video.find({
-      userId: { $nin: subscribedUserList },
-    }).populate("userId", "username image email subscribers");
+    res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
 
-    const combinedVideos = [...subscribedVideos, allVideosExceptSubscribed];
+    // const subscribedVideos = await Promise.all(
+    //   subscribedUserList.map(async (userID) => {
+    //     return await Video.find({ userId: userID }).populate("userId", "username image email subscribers");
+    //   })
+    // );
 
-    const sortedVideos = combinedVideos
-      .flat()
+    // const allVideosExceptSubscribed = await Video.find({
+    //   userId: { $nin: subscribedUserList },
+    // }).populate("userId", "username image email subscribers");
+
+    // const combinedVideos = [...subscribedVideos, allVideosExceptSubscribed];
+
+    // const sortedVideos = combinedVideos
+    //   .flat()
 
   
-    res.status(200).json(sortedVideos);
+    // res.status(200).json(sortedVideos);
   } catch (err) {
     next(err);
   }

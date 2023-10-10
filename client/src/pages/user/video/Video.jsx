@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -10,14 +10,14 @@ import FlagIcon from '@mui/icons-material/Flag';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import Comments from '../../../components/user/coments/Comments';
 import Card from '../../../components/user/card/Card';
-import {format} from "timeago.js";
+import { format } from "timeago.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { dislike, fetchSuccess, like } from "../../../redux/videoSlice";
 import { userInstance, videoInstance } from '../../../utils/axios';
 import { toast } from 'react-toastify';
-import { subscription } from '../../../redux/authSlice';
+import { login, subscription } from '../../../redux/authSlice';
 import VideoReportButton from '../../../components/user/report/Report';
 
 const Container = styled.div`
@@ -162,122 +162,128 @@ margin:5px;
 `;
 
 function Video() {
-    const { user } = useSelector((state) => state.auth);
-    const { currentVideo } = useSelector((state) => state.video);
-    const  block  = useSelector((state) => state.video.block);
-    const dispatch = useDispatch();
-    const [userName, setUserName] = useState({})
+  const { user } = useSelector((state) => state.auth);
+  const { currentVideo } = useSelector((state) => state.video);
+  const block = useSelector((state) => state.video.block);
+  const dispatch = useDispatch();
+  const [userName, setUserName] = useState({})
 
-    const [anchorEl, setAnchorEl] = useState(null);
- const [reportModal, setReportModal] = useState(false)
-  
-    const path = useLocation().pathname.split("/")[2];
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [reportModal, setReportModal] = useState(false)
 
-    useEffect(()=>{
-        videoInstance.get(`/find/${path}`)
-        .then((res)=>{
-            console.log(res.data,'current video');
-            dispatch(fetchSuccess(res.data))
-        })
-        .catch((err)=>{
-          toast.error(err.message )
-            console.log(err);
-        })
+  const path = useLocation().pathname.split("/")[2];
 
-        // userInstance.get(`/find/${currentVideo.userId}`)
-        // .then((res)=>{
-        //     console.log("userdetails",res.data);
-        //     setUserName(res.data)
-        // }).catch((err)=>{
-            
-        //     console.log("username error",err.message);
-        // })
-    },[path, dispatch , block])
+  useEffect(() => {
+    videoInstance.get(`/find/${path}`)
+      .then((res) => {
+        console.log(res.data, 'current video');
+        dispatch(fetchSuccess(res.data))
+      })
+      .catch((err) => {
+        toast.error(err.message)
+        console.log(err);
+      })
 
-    const handleLike = async ()=>{
-        await userInstance.put(`/like/${currentVideo._id}`)
+    // userInstance.get(`/find/${currentVideo.userId}`)
+    // .then((res)=>{
+    //     console.log("userdetails",res.data);
+    //     setUserName(res.data)
+    // }).catch((err)=>{
 
-         dispatch(like(user._id))
-    }
+    //     console.log("username error",err.message);
+    // })
+  }, [path, dispatch, block])
 
-    const handleDislike = async ()=>{
-       await userInstance.put(`/dislike/${currentVideo._id}`)
-        dispatch(dislike(user._id))
-    }
+  const handleLike = async () => {
+    await userInstance.put(`/like/${currentVideo._id}`)
 
+    dispatch(like(user._id))
+  }
 
-     //share video 
-
-     const handleShareClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-  
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-  
-    const handleCopyLink = () => {
-      var url = `http://localhost:3000/video/${currentVideo?._id}`
-      navigator.clipboard.writeText(url)
-        .then(() => {
-         toast.success("Link Copied to Clipboard")
-          handleClose();
-        })
-        .catch((error) => {
-          toast.error('Failed to copy link: ', error);
-          handleClose();
-        });
-    };
-
-    const handleShareOnSocialMedia = (platform) => {
-      // Initialize the Facebook SDK (replace 'YOUR_APP_ID' with your App ID)
-      var url = `http://localhost:3000/video/${currentVideo?._id}`
-
-  window.FB.init({
-    appId: '',
-    autoLogAppEvents: true,
-    xfbml: true,
-    version: 'v13.0',
-  });
-
-  // Create a Facebook share dialog
-  window.FB.ui({
-    method: 'share',
-    href: url, // Replace with the URL of the video you want to share
-  });
-  
-  // Close the menu when sharing is initiated
-  handleClose();
-    };
-  
- // handling subscription ,,
-
-  const handleSubscribe =()=>{
-    console.log(user?.subscribedUsers,"userName?._Diid",currentVideo?.userId?._id);
-    user?.subscribedUsers?.includes(currentVideo?.userId?._id)
-    ? userInstance.put(`/unsub/${currentVideo?.userId?._id}`)
-    : userInstance.put(`/sub/${currentVideo?.userId?._id}`)
-          dispatch(subscription(currentVideo?.userId?._id));
+  const handleDislike = async () => {
+    await userInstance.put(`/dislike/${currentVideo._id}`)
+    dispatch(dislike(user._id))
   }
 
 
-  const handleReport = ()=>{
-     setReportModal(!reportModal)
+  //share video 
+
+  const handleShareClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCopyLink = () => {
+    var url = `http://localhost:3000/video/${currentVideo?._id}`
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        toast.success("Link Copied to Clipboard")
+        handleClose();
+      })
+      .catch((error) => {
+        toast.error('Failed to copy link: ', error);
+        handleClose();
+      });
+  };
+
+  const handleShareOnSocialMedia = (platform) => {
+    // Initialize the Facebook SDK (replace 'YOUR_APP_ID' with your App ID)
+    var url = `http://localhost:3000/video/${currentVideo?._id}`
+
+    window.FB.init({
+      appId: '',
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: 'v13.0',
+    });
+
+    // Create a Facebook share dialog
+    window.FB.ui({
+      method: 'share',
+      href: url, // Replace with the URL of the video you want to share
+    });
+
+    // Close the menu when sharing is initiated
+    handleClose();
+  };
+
+  // handling subscription ,,
+
+  const handleSubscribe = () => {
+    
+ 
+    console.log(user?.subscribedUser, "userName?._Diid", currentVideo?.userId?._id);
+    user?.subscribedUser?.includes(currentVideo?.userId?._id)
+      ? userInstance.put(`/unsub/${currentVideo?.userId?._id}`)
+
+      : userInstance.put(`/sub/${currentVideo?.userId?._id}`)
+
+      dispatch(subscription(currentVideo?.userId?._id));
+      
+
+  }
+
+
+  const handleReport = () => {
+    setReportModal(!reportModal)
   }
 
 
 
   return (
     <Container>
-        <Content>
-            <VideoWrapper>
-            <VideoFrame  src={currentVideo?.videoUrl} controls />
-            </VideoWrapper>
-            <Title>{currentVideo?.title}</Title>
-            <Details>
-              <Info>{currentVideo?.views?.length}views   {format(currentVideo?.createdAt)}</Info> 
-              <Buttons>
-              <Button onClick={handleLike}>
+      <Content>
+        <VideoWrapper>
+          <VideoFrame src={currentVideo?.videoUrl} controls />
+        </VideoWrapper>
+        <Title>{currentVideo?.title}</Title>
+        <Details>
+          <Info>{currentVideo?.views?.length}views   {format(currentVideo?.createdAt)}</Info>
+          <Buttons>
+            <Button onClick={handleLike}>
               {currentVideo?.likes?.includes(user?._id) ? (
                 <ThumbUpIcon />
               ) : (
@@ -293,56 +299,65 @@ function Video() {
               )}{" "}
               Dislike
             </Button>
-                {/* <Button><LibraryAddIcon /> Save </Button> */}
-                <Button onClick={handleReport}><FlagIcon /> Report </Button>
-                {reportModal && <VideoReportButton videoId={currentVideo._id} />}
-                <Button onClick={handleShareClick}><ShareIcon /> Share </Button>
+            {/* <Button><LibraryAddIcon /> Save </Button> */}
+            <Button onClick={handleReport}><FlagIcon /> Report </Button>
+            {reportModal && <VideoReportButton videoId={currentVideo._id} />}
+            <Button onClick={handleShareClick}><ShareIcon /> Share </Button>
             <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleCopyLink}>Copy Link</MenuItem>
-        <MenuItem onClick={() => handleShareOnSocialMedia('facebook')}>Share on Facebook</MenuItem>
-        <MenuItem onClick={() => handleShareOnSocialMedia('twitter')}>Share on Twitter</MenuItem>
-        {/* Add more sharing options as needed */}
-      </Menu>
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleCopyLink}>Copy Link</MenuItem>
+              <MenuItem onClick={() => handleShareOnSocialMedia('facebook')}>Share on Facebook</MenuItem>
+              <MenuItem onClick={() => handleShareOnSocialMedia('twitter')}>Share on Twitter</MenuItem>
+              {/* Add more sharing options as needed */}
+            </Menu>
 
 
 
-                </Buttons> 
-            </Details>
-            <Hr />
-            <User>
-                <UserInfo>
-                    <Image />
-                    <UserDetail>
-                        <UserName>{currentVideo?.userId?.username}</UserName>
-                        <UserCounter>{currentVideo?.userId?.subscribers}subscribers</UserCounter>
-                    </UserDetail>
-                        <Subscribe onClick={handleSubscribe}>
-                        {user?.subscribedUsers?.includes(currentVideo?.userId?._id)
-              ? "SUBSCRIBED"
-              : "SUBSCRIBE"}
-                          </Subscribe>
-                </UserInfo>
-            </User>
-            < Hr />
-            <Comments  videoId ={currentVideo?._id} />
-        </Content>
-        <Recommendation  tags ={currentVideo?.tags}>
-          <Wrapper>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-            <Card type="sm"/>
-          </Wrapper>
-        </Recommendation>
+          </Buttons>
+        </Details>
+        <Hr />
+        <User>
+          <UserInfo>
+            <Image />
+            <UserDetail>
+              <UserName>{currentVideo?.userId?.username}</UserName>
+              <UserCounter>{currentVideo?.userId?.subscribers}subscribers</UserCounter>
+            </UserDetail>
+            {currentVideo?.userId?._id !== user?._id && (
+              <Subscribe onClick={handleSubscribe}
+                style={{
+                  backgroundColor: user?.subscribedUser?.includes(currentVideo?.userId?._id)
+                    ? "#28a745"
+                    : "#007bff",
+                  color: "#ffffff",
+                }}
+              > 
+                {user?.subscribedUser?.includes(currentVideo?.userId?._id)
+                  ? "SUBSCRIBED"
+                  : "SUBSCRIBE"}
+              </Subscribe>
+            )}
+          </UserInfo>
+        </User>
+        < Hr />
+        <Comments videoId={currentVideo?._id} />
+      </Content>
+      <Recommendation tags={currentVideo?.tags}>
+        <Wrapper>
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+          <Card type="sm" />
+        </Wrapper>
+      </Recommendation>
     </Container>
   )
 }

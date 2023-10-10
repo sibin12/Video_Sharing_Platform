@@ -36,7 +36,26 @@ const VideoSchema = new mongoose.Schema({
     dislikes:{
         type: [String],
         default:[]
+    },
+    isBlocked:{
+        type: Boolean,
+        default: false
+    },
+    reports:[
+        {
+        userId:{
+            type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+        },
+        userName:{
+            type: String,
+        },
+        text:{
+            type:String,
+            required: true
+        }
     }
+]
 },
 { timestamps: true}
 );

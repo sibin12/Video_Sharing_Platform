@@ -11,14 +11,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import DehazeOutlinedIcon from '@mui/icons-material/DehazeOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/authSlice';
+import { logout, togglee } from '../../redux/authSlice';
 import Upload from '../user/upload/Upload';
 
 
 const Container = styled.div`
 // flex:1;
-// background-color:${({theme}) =>theme.bg};
-background-color:whitesmoke;
+background-color:${({theme}) =>theme.bg};
+// background-color:whitesmoke;
 color:${({theme}) => theme.text};
 height:100vh;
 position:fixed;
@@ -86,21 +86,23 @@ function Menu( {darkMode , setDarkMode} ) {
     const toggle =useSelector((state)=> state.auth.toggle)
 
     const navigate = useNavigate()
-
- console.log(toggle,"toggeleeee");
       const dispatch = useDispatch()
     const handleLogout = ()=>{
         console.log("logout called");
         dispatch(logout())
         navigate('/')
     }
-    
-   
 
+    const handleToggle = ()=>{
+        if(toggle){
+            dispatch(togglee())
+        }
+    }
+    
     return (
         <>
         <Container >
-            <Wrapper style={{padding: toggle ? '18px 10px' : '0px 0px'}} >
+            <Wrapper style={{padding: toggle ? '18px 10px' : '0px 0px'}} onClick={handleToggle} >
                 
 
              {toggle && (
@@ -137,10 +139,10 @@ function Menu( {darkMode , setDarkMode} ) {
                     <SettingsIcon /> Setting
                 </Item>
                     <Hr />
-                <Item onClick={(e)=> setDarkMode(!darkMode)}>    
+                {/* <Item onClick={(e)=> setDarkMode(!darkMode)}>    
                     <SettingsBrightnessIcon />{darkMode ? "Light": "Dark"} Mode
                 </Item>
-                   <Hr />
+                   <Hr /> */}
                {user ? (<Item  onClick ={handleLogout}>
                     <LogoutIcon  /> Logout
                 </Item> ): <div />} 
