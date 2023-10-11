@@ -1,7 +1,7 @@
 import axios from 'axios';
 const token = localStorage.getItem('token');
 const adminToken = localStorage.getItem('admintoken')
-const URL='http://localhost:5000/api/'
+const URL='https://loopnet.gadgetgalaxy.live/api'
 
 const userInstance = axios.create({
     baseURL:`${URL}users`,

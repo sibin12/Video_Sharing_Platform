@@ -33,7 +33,7 @@ connect();
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(cors({origin: "http://localhost:3000", methods: "GET,POST,PUT,DELETE", credentials: true}))
+app.use(cors({origin: "https://loopnet.gadgetgalaxy.live", methods: "GET,POST,PUT,DELETE", credentials: true}))
 app.use(cookieParser())
 
 app.use(express.json())
@@ -73,7 +73,7 @@ const server = app.listen(process.env.PORT, ()=> console.log("server started"))
 const io = new SocketServer(server, {
     pingTimeout:60000,
     cors: {
-      origin: "http://localhost:3000"
+      origin: "https://loopnet.gadgetgalaxy.live"
     },
   });
   
