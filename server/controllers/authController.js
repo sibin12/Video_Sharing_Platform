@@ -9,7 +9,6 @@ dotenv.config()
 //register
 export const register = (async (req, res, next) => {
     try {
-        console.log("register a user",req.body);
         const username = await User.findOne({ username: req.body.username })
         if (username) {
             console.log("user exists");
@@ -23,19 +22,15 @@ export const register = (async (req, res, next) => {
 
         const newUser = await User.create({ ...req.body, password: hashPassword })
         const { password, ...others } = newUser._doc
-        const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: '5h' })
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' })
 
-        console.log(token,"tokennnnn", others);
-        
-        res.cookie("access_token", token,{
+        res.cookie("access_token", token, {
             httpOnly: false,
         })
-        .status(200)
-        .json({others, token})
-        // return res.status(201).json({ others})
+            .status(200)
+            .json({ others, token })
     } catch (error) {
         next(error)
-        // return res.status(500).json(error.message)
     }
 
 })
@@ -43,40 +38,36 @@ export const register = (async (req, res, next) => {
 // login
 export const login = (async (req, res, next) => {
     try {
-        
+
         const user = await User.findOne({ email: req.body.email })
         if (!user) {
             console.log("email not found");
-            // throw new Error("Invalid credentials")
             return next(createError(404, "User not found!"))
         }
 
-        if(user.isBlocked){
-            return next(createError(403,"your account is blocked by admin"))
+        if (user.isBlocked) {
+            return next(createError(403, "your account is blocked by admin"))
         }
         const comparePass = await bcrypt.compare(req.body.password, user.password)
         if (!comparePass) {
             console.log("wrong password");
             return next(createError(404, "Wrong credentials"))
-            // throw new Error("Invalid credentials")
         }
 
         const { password, ...others } = user._doc
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
-        console.log(token, "tokennnnnnnn");
-        
+
         res.cookie("access_token", token, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000,
             secure: false,
             signed: false
         })
-        .status(200)
-        .json({others,token})
-    
+            .status(200)
+            .json({ others, token })
+
     } catch (error) {
         next(error)
-        // return res.status(500).json(error.message)
     }
 })
 
@@ -87,7 +78,7 @@ export const googleAuth = (async (req, res) => {
         const isExisting = await User.findOne({ email: req.body.email })
         if (isExisting) {
             const token = jwt.sign({ id: isExisting._id, isAdmin: isExisting.isAdmin }, process.env.JWT_SECRET, { expiresIn: '5h' })
-            return res.status(201).json({ others : isExisting, token })
+            return res.status(201).json({ others: isExisting, token })
         } else {
             const newUser = new User({
                 ...req.body,
@@ -95,7 +86,7 @@ export const googleAuth = (async (req, res) => {
             })
             const savedUser = await newUser.save()
             const token = jwt.sign({ id: savedUser._id, isAdmin: savedUser.isAdmin }, process.env.JWT_SECRET, { expiresIn: '5h' })
-            return res.status(201).json({others : savedUser, token })
+            return res.status(201).json({ others: savedUser, token })
         }
 
     } catch (error) {

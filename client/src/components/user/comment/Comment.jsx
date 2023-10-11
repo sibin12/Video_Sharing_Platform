@@ -124,7 +124,6 @@ function Comment({ comment, setComments ,videoId }) {
   useEffect(() => {
     userInstance.get(`/find/${comment.userId}`)
       .then((res) => {
-        console.log(res.data, "commmmmetsss");
         setUserName(res.data)
       })
       .catch((err)=>{

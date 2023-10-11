@@ -72,10 +72,8 @@ function VideoReportButton({videoId}) {
             // Handle error when report reason is not selected
             return;
         }
-        console.log(reportReason,"reportresons");
         videoInstance.post('/report',{videoId,reportReason,user})
         .then((res)=>{
-            console.log("response get from report api");
             setReportOpen(false);
             toast.success(res.data)
         })
@@ -86,7 +84,6 @@ function VideoReportButton({videoId}) {
 
     return (
         <>
-            {/* <Button onClick={openReportPopup}></Button> */}
             {isReportOpen && (
                 <ReportPopup>
                     <ReportForm onSubmit={handleSubmitReport}>

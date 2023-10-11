@@ -214,7 +214,6 @@ function Chat({ fetchAgain }) {
   const fetchChats = async () => {
     try {
       const { data } = await chatInstance.get('/');
-      console.log(data,"😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎");
       setChats(data);
     } catch (error) {
       toast.error(error.message || 'Failed to load chats');

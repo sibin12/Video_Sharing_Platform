@@ -146,30 +146,24 @@ function Navbar() {
   const { user } = useSelector((state) => state.auth)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false); // State to control the dropdown visibility
-  console.log(user,'❤️❤️');
   const [q, setQ] = useState("")
-  console.log(user, "user");
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    console.log("modal closing");
     setIsModalOpen(false);
   };
   const toggleMenu = () => {
-    console.log("hi");
     dispatch(togglee())
 
   };
 
 
   const toggleDropdown = () => {
-    // Toggle the dropdown visibility
     setDropdownOpen(!isDropdownOpen);
   };
 
-  // Sample options for the dropdown
   const options = [
     { label: 'Profile', value: 'profile' },
     // { label: 'Setting', value: 'setting' },

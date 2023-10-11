@@ -188,7 +188,6 @@ function Video() {
 
     videoInstance.get(`/tags?tags=${currentVideo?.tags}`)
       .then((res) => {
-        console.log(res.data, "😍😍😍😍😍😍😍😍😍😍😍😍😍😍😍");
         setVideobyTag(res.data)
       })
       .catch((err) => {

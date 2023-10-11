@@ -21,18 +21,6 @@ export const update = async (req, res, next) => {
   }
 };
 
-export const deleteUser = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
-    try {
-      await User.findByIdAndDelete(req.params.id);
-      res.status(200).json("User has been deleted.");
-    } catch (err) {
-      next(err);
-    }
-  } else {
-    return next(createError(403, "You can delete only your account!"));
-  }
-};
 
 export const getUser = async (req, res, next) => {
   try {
@@ -75,7 +63,6 @@ export const dislike = async (req, res, next) => {
 
 export const subscribe = async (req, res, next) => {
   try {
-    console.log(req.params, req.user);
     const updateUser = await User.findByIdAndUpdate(req.user.id, {
       $addToSet: { subscribedUser: req.params.id },
     },
@@ -86,7 +73,6 @@ export const subscribe = async (req, res, next) => {
       $inc: { subscribers: 1 },
     });
 
-    console.log(updateUser,"after subscribe");
     res.status(200).json(updateUser)
   } catch (err) {
     next(err);
@@ -96,14 +82,13 @@ export const subscribe = async (req, res, next) => {
 export const unsubscribe = async (req, res, next) => {
   try {
     try {
-      const user =  await User.findByIdAndUpdate(req.user.id, {
+      const user = await User.findByIdAndUpdate(req.user.id, {
         $pull: { subscribedUser: req.params.id },
-      }, {new: true}
+      }, { new: true }
       );
       await User.findByIdAndUpdate(req.params.id, {
         $inc: { subscribers: -1 },
       });
-      console.log(user,"after unsubscribe");
       res.status(200).json("Unsubscription successfull.")
     } catch (err) {
       next(err);
@@ -120,7 +105,6 @@ export const uploadImage = async (req, res, next) => {
     }
     // The uploaded file can be accessed as req.file
     const uploadedImagePath = req.file.path;
-    console.log(uploadedImagePath, "😊😊😊😊");
     // Handle the uploaded image as needed, e.g., save the image path to a database
     // You can also resize or process the image here
 
@@ -140,7 +124,6 @@ export const allUsers = async (req, res) => {
         { email: { $regex: req.query.search, $options: "i" } },
       ]
     } : {}
-    // const users = await User.find(keyword).find({_id: {$ne: req.user._id}});
     const users = await User.find(keyword)
 
     res.status(200).json(users)

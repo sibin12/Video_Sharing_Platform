@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { userInstance, videoInstance } from '../../../utils/axios';
 import { toast } from 'react-toastify';
-import EditVideo from '../../../components/user/edit-video/EditVideo/'
 import { updateUser } from '../../../redux/authSlice';
 import { validateImageFile } from '../../../utils/Validation'
 const Container = styled.div`
@@ -178,7 +177,6 @@ const Profile = () => {
           },
         })
 
-        console.log(data.user, "😎😎😎😎😎😎");
 
         dispatch(updateUser(data.user))
         console.log(user);

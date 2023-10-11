@@ -35,7 +35,6 @@ const Search = () => {
   useEffect(() => {
     videoInstance.get(`/search${query}`)
       .then((res) => {
-        console.log(res.data, "search results");
         setVideos(res.data);
       })
       .catch((err) => {

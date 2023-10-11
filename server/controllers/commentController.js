@@ -14,11 +14,9 @@ export const addComment = async (req, res, next) => {
 
 export const deleteComment = async (req, res, next) => {
   try {
-    console.log("deleteing comment",req.params.id);
-    
-      await Comment.findByIdAndDelete(req.params.id);
-      res.status(200).json("The comment has been deleted.");
-    
+    await Comment.findByIdAndDelete(req.params.id);
+    res.status(200).json("The comment has been deleted.");
+
   } catch (err) {
     console.log(err.message);
     next(err);
@@ -28,8 +26,7 @@ export const deleteComment = async (req, res, next) => {
 export const getComments = async (req, res, next) => {
   try {
     const comments = await Comment.find({ videoId: req.params.videoId })
-    .populate('replies.userId',);
-    console.log(comments,"commentssss");
+      .populate('replies.userId',);
     res.status(200).json(comments);
   } catch (err) {
     next(err);
@@ -38,10 +35,8 @@ export const getComments = async (req, res, next) => {
 
 
 
-export const replyComment = async (req, res, next)=>{
+export const replyComment = async (req, res, next) => {
   try {
-    console.log(req.body,"body", req.user.id,"userrrrrrrrrr");
-
     const comment = await Comment.findById(req.body.commentId);
     if (!comment) {
       console.log("comment not found");
@@ -53,7 +48,6 @@ export const replyComment = async (req, res, next)=>{
       text: req.body.replyText,
     };
 
-    console.log("new comment reply", newNestedComment);
     comment.replies.push(newNestedComment);
     await comment.save();
     res.status(200).json(comment);
@@ -70,24 +64,21 @@ export const deleteReply = async (req, res, next) => {
 
   try {
     const updatedComment = await Comment.findOneAndUpdate(
-      { _id: commentId }, // Find the comment by its ID
+      { _id: commentId },
       {
         $pull: {
-          replies: { _id: replyId } // Remove the reply with the specified ID from the replies array
+          replies: { _id: replyId }
         }
       },
-      { new: true } // Return the updated comment
+      { new: true }
     );
 
     if (!updatedComment) {
-      // If the comment with the given ID is not found
       return res.status(404).json({ message: "Comment not found" });
     }
 
-    // Reply successfully deleted
     res.status(200).json(updatedComment);
   } catch (error) {
-    // Handle any errors
     next(error);
   }
 };

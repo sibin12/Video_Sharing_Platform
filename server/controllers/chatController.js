@@ -5,7 +5,6 @@ import User from "../models/User.js";
 export const accessChat = (async (req, res) => {
 
     try {
-
         const { userId } = req.body;
 
         if (!userId) {
@@ -28,14 +27,13 @@ export const accessChat = (async (req, res) => {
             select: "username image email",
         });
 
-        if (isChat.length > 0) {""
-            console.log("accessing chat",isChat[0]);
+        if (isChat.length > 0) {
             res.send(isChat[0]);
         } else {
             var chatData = {
                 chatName: "sender",
                 isGroupChat: false,
-                users: [ userId, req.user.id],
+                users: [userId, req.user.id],
             };
 
             try {
@@ -45,7 +43,6 @@ export const accessChat = (async (req, res) => {
                     "-password"
                 );
                 res.status(200).json(FullChat);
-                console.log(FullChat,"access Chats");
             } catch (error) {
                 res.status(400);
                 throw new Error(error.message);
@@ -58,7 +55,6 @@ export const accessChat = (async (req, res) => {
 
 
 //  Fetch all chats for a user
-
 export const fetchChats = (async (req, res) => {
     try {
         Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
@@ -71,7 +67,6 @@ export const fetchChats = (async (req, res) => {
                     path: "latestMessage.sender",
                     select: "username image email",
                 });
-                // console.log(results,"fetchchats");
                 res.status(200).send(results);
             });
     } catch (error) {
@@ -84,22 +79,18 @@ export const fetchChats = (async (req, res) => {
 
 
 //   Create New Group Chat
-
 export const createGroupChat = (async (req, res) => {
     if (!req.body.users || !req.body.name) {
         return res.status(400).send({ message: "Please Fill all the feilds" });
     }
-    // console.log("group chat creating ," ,req.body);
 
     var users = JSON.parse(req.body.users);
-  console.log(users,"😁😁😁");
+    console.log(users, "😁😁😁");
     if (users.length < 2) {
         return res
             .status(400)
             .send("More than 2 users are required to form a group chat");
     }
-console.log(req.user,"😊😊😊"); 
-
     users.push(req.user.id);
 
     try {
@@ -122,7 +113,6 @@ console.log(req.user,"😊😊😊");
 });
 
 //   Rename Group
-
 export const renameGroup = (async (req, res) => {
     const { chatId, chatName } = req.body;
 
@@ -147,7 +137,6 @@ export const renameGroup = (async (req, res) => {
 });
 
 // Remove user from Group
-
 export const removeFromGroup = (async (req, res) => {
     const { chatId, userId } = req.body;
 
@@ -174,10 +163,9 @@ export const removeFromGroup = (async (req, res) => {
 });
 
 // Add user to Group / Leave
-
 export const addToGroup = (async (req, res) => {
     const { chatId, userId } = req.body;
- console.log(req.body,"❤️❤️❤️");
+    console.log(req.body, "❤️❤️❤️");
     // check if the requester is admin
 
     const added = await Chat.findByIdAndUpdate(
@@ -187,7 +175,7 @@ export const addToGroup = (async (req, res) => {
         },
         {
             new: true,
-        } 
+        }
     )
         .populate("users", "-password")
         .populate("groupAdmin", "-password");

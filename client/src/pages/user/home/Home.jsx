@@ -3,7 +3,6 @@ import { styled } from 'styled-components'
 import { videoInstance } from '../../../utils/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import Card from '../../../components/user/card/Card'
-import ChatLoading from '../../../components/user/chat/ChatLoading'
 
 
 const Container = styled.div`
@@ -34,7 +33,6 @@ const Container = styled.div`
 function Home({ type }) {
   // const dispatch = useDispatch()
   const block  = useSelector((state) => state.video.block);
-  console.log(block,"❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️");
   const toggle = useSelector((state) => state.auth.toggle)
   const [videoData, setVideoData] = useState([]);
    
@@ -44,13 +42,11 @@ function Home({ type }) {
         // setVideoData([]);
         setVideoData(res.data);
 
-        console.log(res.data, "response");
       })
       .catch((err) => {
         console.log(err);
       })
   }, [type])
-console.log(block,"block data");
   return (
     <Container style={{ padding: toggle ? ' 20px 20px 20px 140px' : '20px 20px 20px 20px' }} >
       {videoData && videoData.map((video) => {

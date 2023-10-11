@@ -111,7 +111,6 @@ function Register() {
         try {
           authInstance.post('/login',{email, password})
           .then((res)=>{
-           console.log(res.data , " response of login ");
             const token = res.data.token;
             localStorage.setItem('token', token);
             localStorage.setItem("userInfo", JSON.stringify(res.data));
@@ -172,7 +171,6 @@ function Register() {
       try {
              authInstance.post('/register',{username, email, password})
              .then((res)=>{
-              console.log(res.data , " response of register ");
               const token = res.data.token;
             localStorage.setItem('token', token);
             // localStorage.setItem('userInfo', res.data);
@@ -199,7 +197,6 @@ function Register() {
     const sigInWithGoogle = async () => {
       try {
         const result = await signInWithPopup(auth, provider);
-        console.log(result, "result from google");
     
         const res = await fetch(`http://localhost:5000/api/auth/google`, {
           headers: {
@@ -214,7 +211,6 @@ function Register() {
         });
            const data = await res.json()
 
-           console.log(data, "register data");
 
            const token = data.token;
            localStorage.setItem('token', token);

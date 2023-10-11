@@ -3,7 +3,7 @@ import Video from "../models/Video.js";
 import { createError } from "../error.js";
 
 export const addVideo = async (req, res, next) => {
-  
+
   const newVideo = new Video({ userId: req.user.id, ...req.body });
   try {
     const savedVideo = await newVideo.save();
@@ -22,15 +22,13 @@ export const getVideo = async (req, res, next) => {
       return res.status(403).json({ message: "Video is blocked by admin" });
     }
     res.status(200).json(video);
-    
+
   } catch (err) {
     next(err);
   }
 };
 
 export const addView = async (req, res, next) => {
-  console.log(req.body, req.params,"body");
-
   let id = req.body.userId;
   let videoId = req.params.id;
 
@@ -48,8 +46,8 @@ export const addView = async (req, res, next) => {
     // Add userId to the views array
     video.views.push(id);
     await video.save();
-      return  res.status(200).json("The view has been increased.");
-   
+    return res.status(200).json("The view has been increased.");
+
   } catch (err) {
     next(err);
   }
@@ -57,9 +55,9 @@ export const addView = async (req, res, next) => {
 
 export const random = async (req, res, next) => {
   try {
- 
-  const videos = await  Video.find({isBlocked :false})
-  .populate("userId", "username image email subscribers")
+
+    const videos = await Video.find({ isBlocked: false })
+      .populate("userId", "username image email subscribers")
     res.status(200).json(videos);
   } catch (err) {
     next(err);
@@ -72,7 +70,7 @@ export const getByTag = async (req, res, next) => {
   const tags = req.query.tags.split(",");
   try {
     const videos = await Video.find({ tags: { $in: tags } }).limit(10)
-    .populate("userId", "username image email subscribers")
+      .populate("userId", "username image email subscribers")
 
     res.status(200).json(videos);
   } catch (err) {
@@ -82,7 +80,6 @@ export const getByTag = async (req, res, next) => {
 
 export const search = async (req, res, next) => {
   const query = req.query.q;
-  console.log(query,"query");
   try {
     const videos = await Video.find({
       $or: [
@@ -94,9 +91,8 @@ export const search = async (req, res, next) => {
         },
       ],
     }).limit(40)
-    .populate("userId", "username image email subscribers")
-    
-    console.log(videos,"search results");
+      .populate("userId", "username image email subscribers")
+
     res.status(200).json(videos);
   } catch (err) {
     next(err);
@@ -104,7 +100,7 @@ export const search = async (req, res, next) => {
 };
 
 
-export const reportVideo = async (req,res,next)=>{
+export const reportVideo = async (req, res, next) => {
   try {
     const currentVideo = await Video.findOneAndUpdate(
       { _id: req.body.videoId },
@@ -112,7 +108,7 @@ export const reportVideo = async (req,res,next)=>{
         $push: {
           reports: {
             userId: req.body.user._id,
-            userName:req.body.user.username,
+            userName: req.body.user.username,
             text: req.body.reportReason
           }
         }
@@ -120,7 +116,7 @@ export const reportVideo = async (req,res,next)=>{
       { new: true } // This option returns the updated document
     );
 
-    if(!currentVideo){
+    if (!currentVideo) {
       return
     }
     res.status(200).json("Reported successfully.")
@@ -131,10 +127,10 @@ export const reportVideo = async (req,res,next)=>{
 }
 
 
-export const findVideos = async (req,res,next)=>{
+export const findVideos = async (req, res, next) => {
   try {
     const userId = req.params.id;
-   const videos = await Video.find({userId : userId})
+    const videos = await Video.find({ userId: userId })
     res.status(200).json(videos)
   } catch (error) {
     console.log(error.message);
@@ -144,23 +140,21 @@ export const findVideos = async (req,res,next)=>{
 export const trend = async (req, res, next) => {
   try {
     const videos = await Video.find().sort({ views: -1 })
-    .populate("userId", "username image email subscribers")
-     console.log(videos,"💕💕💕💕 trendss");
+      .populate("userId", "username image email subscribers")
     res.status(200).json(videos);
   } catch (err) {
     next(err);
   }
 };
 
- 
+
 export const sub = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    // console.log(user, "🤖🤖🤖🤖");
     const subscribedUserList = user.subscribedUser;
 
-    if (!subscribedUserList.length < 1) {
-     console.log("Please subscribe to any user")
+    if (subscribedUserList.length < 1) {
+      console.log("Please subscribe to any user")
     }
 
     const list = await Promise.all(
@@ -170,24 +164,6 @@ export const sub = async (req, res, next) => {
     );
 
     res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
-
-    // const subscribedVideos = await Promise.all(
-    //   subscribedUserList.map(async (userID) => {
-    //     return await Video.find({ userId: userID }).populate("userId", "username image email subscribers");
-    //   })
-    // );
-
-    // const allVideosExceptSubscribed = await Video.find({
-    //   userId: { $nin: subscribedUserList },
-    // }).populate("userId", "username image email subscribers");
-
-    // const combinedVideos = [...subscribedVideos, allVideosExceptSubscribed];
-
-    // const sortedVideos = combinedVideos
-    //   .flat()
-
-  
-    // res.status(200).json(sortedVideos);
   } catch (err) {
     next(err);
   }

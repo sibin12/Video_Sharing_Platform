@@ -80,7 +80,6 @@ function Comments({videoId}) {
     commentInstance.get(`/${videoId}`)
     .then((res)=>{
       setComments(res.data)
-      console.log(comments, '💕💕💕💕')
     })
     .catch((err)=>{
       console.log(err.message);
@@ -92,18 +91,13 @@ function Comments({videoId}) {
      
       commentInstance.post('/',{text ,user,videoId})
       .then((res)=>{
-        console.log(res.data,"add comment response");
         setComments([...comments, res.data]);
-        setText(''); // Clear the input field after adding the comment
+        setText(''); 
       })
       .catch((err)=>{
         console.log(err.message);
       })
    }
-
-//    const handleReply =()=>{
-//     commentInstance.post(`/`)
-//  }
 
   
   return (

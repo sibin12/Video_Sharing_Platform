@@ -12,25 +12,21 @@ dotenv.config()
 
 // login
 export const adminLogin = (async (req, res, next) => {
-    console.log("backend of admin login");
     try {
 
         const user = await User.findOne({ email: req.body.email })
         if (!user) {
             console.log("email not found");
-            // throw new Error("Invalid credentials")
             return next(createError(404, "admin not found!"))
         } else if (user.isAdmin) {
             const comparePass = await bcrypt.compare(req.body.password, user.password)
             if (!comparePass) {
                 console.log("wrong password");
                 return next(createError(404, "Wrong credentials"))
-                // throw new Error("Invalid credentials")
             }
 
             const { password, ...others } = user._doc
             const token = jwt.sign({ id: user._id }, process.env.ADMIN_JWT_SECRET, { expiresIn: '5h' });
-            console.log(token, "tokennnnnnnn");
 
             res.cookie("access_token_admin", token, {
                 httpOnly: true,
@@ -45,22 +41,17 @@ export const adminLogin = (async (req, res, next) => {
             return next(createError(403, "You are not an Admin"))
         }
 
-        // return res.status(200).json({ others, token })
     } catch (error) {
         next(error)
-        // return res.status(500).json(error.message)
     }
 })
 
 
 
 export const UserDetails = async (req, res, next) => {
-    console.log(
-        "userdetails fetching "
-    );
+
     try {
         const users = await User.find()
-        // console.log(users, "userdetails");
         res.status(200).json(users)
     } catch (error) {
         console.log(error.message);
@@ -116,7 +107,6 @@ export const UnblockVideo = async (req, res) => {
 
 export const BlockUser = async (req, res) => {
     const { userId } = req.params;
-    console.log(userId, "😊😊😊😊");
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -134,7 +124,6 @@ export const BlockUser = async (req, res) => {
 
 export const UnblockUser = async (req, res) => {
     const { userId } = req.params;
-    console.log(userId, "😊😊😊😊");
 
     try {
         const user = await User.findById(userId);
@@ -154,8 +143,6 @@ export const UnblockUser = async (req, res) => {
 
 export const ChartDatas = async (req, res) => {
     try {
-        console.log("searching chart data");
-
         const result = await Video.aggregate([
             {
                 $project: {
@@ -204,10 +191,10 @@ export const ChartDatas = async (req, res) => {
             return monthData ? monthData.count : 0;
         });
 
-        res.json({ videosData, usersData }); 
+        res.json({ videosData, usersData });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ error: error.message }); 
+        res.status(500).json({ error: error.message });
     }
 };
 
