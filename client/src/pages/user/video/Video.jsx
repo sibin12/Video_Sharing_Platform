@@ -167,6 +167,8 @@ function Video() {
   const block = useSelector((state) => state.video.block);
   const dispatch = useDispatch();
   const [userName, setUserName] = useState({})
+  const [videobyTag, setVideobyTag] = useState([])
+
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [reportModal, setReportModal] = useState(false)
@@ -184,14 +186,14 @@ function Video() {
         console.log(err);
       })
 
-    // userInstance.get(`/find/${currentVideo.userId}`)
-    // .then((res)=>{
-    //     console.log("userdetails",res.data);
-    //     setUserName(res.data)
-    // }).catch((err)=>{
-
-    //     console.log("username error",err.message);
-    // })
+    videoInstance.get(`/tags?tags=${currentVideo?.tags}`)
+      .then((res) => {
+        console.log(res.data, "😍😍😍😍😍😍😍😍😍😍😍😍😍😍😍");
+        setVideobyTag(res.data)
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
   }, [path, dispatch, block])
 
   const handleLike = async () => {
@@ -321,7 +323,7 @@ function Video() {
         <Hr />
         <User>
           <UserInfo>
-            <Image />
+            <Image src={`http://localhost:5000/images/profile/${currentVideo?.userId?.image}`} />
             <UserDetail>
               <UserName>{currentVideo?.userId?.username}</UserName>
               <UserCounter>{currentVideo?.userId?.subscribers}subscribers</UserCounter>
@@ -346,16 +348,24 @@ function Video() {
         <Comments videoId={currentVideo?._id} />
       </Content>
       <Recommendation tags={currentVideo?.tags}>
-        <Wrapper>
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
-          <Card type="sm" />
+      <Wrapper>
+          {videobyTag ? (
+            videobyTag.map((video) => {
+              return (
+                <Card key={video?._id} video={video} type='sm' />
+              )
+            })
+          ) : (
+            <>
+              <Card type="sm" />
+              <Card type="sm" />
+              <Card type="sm" />
+              <Card type="sm" />
+              <Card type="sm" />
+              <Card type="sm" />
+            </>
+          )}
+
         </Wrapper>
       </Recommendation>
     </Container>

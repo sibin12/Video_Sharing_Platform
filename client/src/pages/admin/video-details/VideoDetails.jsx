@@ -98,7 +98,7 @@ function VideoDetails() {
               <td className='desc'>{video.desc}</td>
               <td>{video?.userId?.username || "sibin"}</td>
               <td>{video?.views?.length}</td>
-              <td>{video?.createdAt}</td>
+              <td>{new Date(video?.createdAt).toLocaleDateString()}</td>
               <td>
                 {video?.reports?.length}{' '}
                 <ExpandCircleDownIcon onClick={() => viewReports(video.reports)} />

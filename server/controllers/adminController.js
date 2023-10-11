@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { createError } from '../error.js'
 import Video from '../models/Video.js'
+import Comment from '../models/Comment.js'
 dotenv.config()
 
 
@@ -115,7 +116,7 @@ export const UnblockVideo = async (req, res) => {
 
 export const BlockUser = async (req, res) => {
     const { userId } = req.params;
- console.log(userId,"😊😊😊😊");
+    console.log(userId, "😊😊😊😊");
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -133,7 +134,7 @@ export const BlockUser = async (req, res) => {
 
 export const UnblockUser = async (req, res) => {
     const { userId } = req.params;
-    console.log(userId,"😊😊😊😊");
+    console.log(userId, "😊😊😊😊");
 
     try {
         const user = await User.findById(userId);
@@ -150,3 +151,74 @@ export const UnblockUser = async (req, res) => {
     }
 }
 
+
+export const ChartDatas = async (req, res) => {
+    try {
+        console.log("searching chart data");
+
+        const result = await Video.aggregate([
+            {
+                $project: {
+                    month: { $month: '$createdAt' }, // Extract the month from the 'createdAt' field
+                },
+            },
+            {
+                $group: {
+                    _id: '$month',
+                    count: { $sum: 1 }, // Count the videos for each month
+                },
+            },
+            {
+                $sort: {
+                    _id: 1, // Sort by month
+                },
+            },
+        ]);
+
+        const videosData = Array.from({ length: 12 }, (_, index) => {
+            const monthData = result.find((data) => data._id === (index + 1));
+            return monthData ? monthData.count : 0;
+        });
+
+        const userResult = await User.aggregate([
+            {
+                $project: {
+                    month: { $month: '$createdAt' }
+                }
+            },
+            {
+                $group: {
+                    _id: '$month',
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $sort: {
+                    _id: 1,
+                },
+            },
+        ])
+
+        const usersData = Array.from({ length: 12 }, (_, index) => {
+            const monthData = userResult.find((data) => data._id === (index + 1));
+            return monthData ? monthData.count : 0;
+        });
+
+        res.json({ videosData, usersData }); 
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: error.message }); 
+    }
+};
+
+export const DashboardDetails = async (req, res) => {
+    try {
+        const videos = await Video.find({}).count()
+        const users = await User.find({}).count()
+        const comments = await Comment.find({}).count()
+
+        res.status(200).json({ videos, users, comments })
+    } catch (error) {
+        console.log(error);
+    }
+}

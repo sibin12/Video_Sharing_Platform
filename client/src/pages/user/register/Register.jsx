@@ -111,12 +111,9 @@ function Register() {
         try {
           authInstance.post('/login',{email, password})
           .then((res)=>{
-            // localStorage.setItem("IS AUTH",true)
            console.log(res.data , " response of login ");
-           // When you receive the token in the response
             const token = res.data.token;
             localStorage.setItem('token', token);
-            // localStorage.setItem('userInfo', res.data);
             localStorage.setItem("userInfo", JSON.stringify(res.data));
 
            dispatch(login(res.data))
@@ -132,19 +129,7 @@ function Register() {
             }
            console.log(err,"error of login");
           })
-          // const res = await fetch(`http://localhost:5000/auth/login` , {
-          //   headers: {
-          //     "Content-Type": "application/json"
-          //   },
-          //   method: "POST",
-          //   body : JSON.stringify({email , password})
-          // })
-          // const data = await res.json()
-          // // alert(data)
-          // console.log(data, "login data");
-          // setLoginErr(data)
-          // dispatch(login(data))
-          // navigate('/')
+         
         } catch (error) {
           console.log(error.message);
         }
@@ -203,15 +188,6 @@ function Register() {
                 setRegisterErr('this email is already taken!');
               }
              })
-        // const res = await fetch(`http://localhost:5000/auth/register`, {
-        //   headers: {
-        //     "Content-Type": "application/json"
-        //   },
-        //   method: "POST",
-        //   body: JSON.stringify({username, email, password})
-        // })
-        // const data = await res.json()
-        // alert(data);
 
         
       } catch (error) {
@@ -225,7 +201,7 @@ function Register() {
         const result = await signInWithPopup(auth, provider);
         console.log(result, "result from google");
     
-        const res = await fetch(`http://localhost:5000/auth/google`, {
+        const res = await fetch(`http://localhost:5000/api/auth/google`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -239,6 +215,10 @@ function Register() {
            const data = await res.json()
 
            console.log(data, "register data");
+
+           const token = data.token;
+           localStorage.setItem('token', token);
+           localStorage.setItem("userInfo", JSON.stringify(res.data));
           //  setRegisterErr(data)
            dispatch(register(data))
            navigate('/')

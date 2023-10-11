@@ -7,12 +7,16 @@ $secondary-color:rgb(255, 255, 255);
 $accent-color:  hsl(163, 72%, 41%);
 $blue-color:hsl(208, 92%, 53%);
 
-body {
-  font-family: sans-serif;
-}
 
+
+.chart{
+     width: 60%;
+    padding:70px 10px 10px 10px;
+}
 .dashboard {
+    display: flex;
   color: $primary-color;
+  justify-content: space-between; 
   background-color: $secondary-color;
   padding-top: 70px;
 
@@ -21,7 +25,7 @@ body {
 
     ul {
       list-style: none;
-      padding: 0;
+      padding: 7px;
     }
 
     li {
@@ -36,7 +40,7 @@ body {
 
   .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 20px 20px 20px 35px;
 
     .widgets {
       display: flex;
@@ -72,28 +76,6 @@ body {
       
     }
 
-    .widget {
-      width: 250px;
-      margin: 10px;
-      padding: 20px;
-      background-color: $secondary-color;
-
-      h3 {
-        margin-bottom: 10px;
-        color: $primary-color;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 5px;
-        color: $primary-color;
-      }
-    }
+    
   }
 }

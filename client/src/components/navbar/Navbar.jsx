@@ -10,10 +10,8 @@ import './Navbar.scss'
 import { Link, useNavigate } from 'react-router-dom';
 import RegisterModal from '../../pages/user/modal/RegisterModal';
 import { useSelector, useDispatch } from 'react-redux';
-// import Dropdown from 'react-dropdown'
 import { createGlobalStyle } from 'styled-components';
 
-// import '../../style.css'
 
 const Container = styled.div`
 position: fixed;
@@ -174,7 +172,7 @@ function Navbar() {
   // Sample options for the dropdown
   const options = [
     { label: 'Profile', value: 'profile' },
-    { label: 'Setting', value: 'setting' },
+    // { label: 'Setting', value: 'setting' },
     { label: 'Logout', value: 'logout' },
   ];
 
@@ -184,10 +182,7 @@ function Navbar() {
       setDropdownOpen(!isDropdownOpen);
 
       navigate('/profile');
-    } else if (optionValue === 'setting') {
-      setDropdownOpen(!isDropdownOpen);
-
-      // navigate('/settings');
+    
     } else if (optionValue === 'logout') {
       setDropdownOpen(!isDropdownOpen);
       dispatch(logout())

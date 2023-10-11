@@ -74,7 +74,6 @@ export const login = (async (req, res, next) => {
         .status(200)
         .json({others,token})
     
-        // return res.status(200).json({ others, token })
     } catch (error) {
         next(error)
         // return res.status(500).json(error.message)
@@ -88,7 +87,7 @@ export const googleAuth = (async (req, res) => {
         const isExisting = await User.findOne({ email: req.body.email })
         if (isExisting) {
             const token = jwt.sign({ id: isExisting._id, isAdmin: isExisting.isAdmin }, process.env.JWT_SECRET, { expiresIn: '5h' })
-            return res.status(201).json({ isExisting, token })
+            return res.status(201).json({ others : isExisting, token })
         } else {
             const newUser = new User({
                 ...req.body,
@@ -96,7 +95,7 @@ export const googleAuth = (async (req, res) => {
             })
             const savedUser = await newUser.save()
             const token = jwt.sign({ id: savedUser._id, isAdmin: savedUser.isAdmin }, process.env.JWT_SECRET, { expiresIn: '5h' })
-            return res.status(201).json({ savedUser, token })
+            return res.status(201).json({others : savedUser, token })
         }
 
     } catch (error) {

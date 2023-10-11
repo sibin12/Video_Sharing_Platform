@@ -1,70 +1,72 @@
-import React from 'react'
-import AdminNavbar from '../../../components/admin/admin-navbar/AdminNavbar'
-import AdminLogin from '../admin-login/AdminLogin'
-import UserDetails from '../user-details/userDetails'
+import React, { useEffect, useState } from 'react'
+import MyChart from '../../../components/admin/admin-chart/MyChart'
 import './home.scss';
+import { adminInstance } from '../../../utils/axios';
 
 function AdminHome() {
+const [videos, setVideos] = useState(0)
+const [users, setUsers] = useState(0)
+const [comments, setComments] = useState(0)
+ useEffect(() => {
+  const fetchData = async()=>{
+    const {data} = await adminInstance.get('/dashboard-details')
+    const {users, videos, comments} = data
+
+    setVideos(videos);
+    setUsers(users)
+    setComments(comments)
+  }
+
+ 
+ fetchData();
+ }, [])
+ 
+
+  return (
+  
+  <>
 
 
 
 
+    <div className="dashboard">
 
-    return (
+      <div className="main-content">
+        <h1>LoopNet Admin Dashboard</h1>
 
-      <div className="dashboard">
+        <div className="widgets">
+          <div className="widget">
+            <h3>Overview</h3>
+            <ul className="overview-items">
+              <li className="overview-item">
+                <i className="fa-solid fa-video"></i>
+                <span>{videos} Videos</span>
+              </li>
+              <li className="overview-item">
+                <i className="fa-solid fa-users"></i>
+                <span>{users} Users</span>
+              </li>
+              <li className="overview-item">
+                <i className="fa-solid fa-comments"></i>
+                <span>{comments} Comments</span>
+              </li>
+            </ul>
 
-    <div className="main-content">
-      <h1>LoopNet Admin Dashboard</h1>
-
-      <div className="widgets">
-        <div className="widget">
-          <h3>Overview</h3>
-          <ul class="overview-items">
-    <li className="overview-item">
-      <i className="fa-solid fa-video"></i>
-      <span>1000 Videos</span>
-    </li>
-    <li className="overview-item">
-      <i class="fa-solid fa-users"></i>
-      <span>1000 Users</span>
-    </li>
-    <li class="overview-item">
-      <i class="fa-solid fa-comments"></i>
-      <span>1000 Comments</span>
-    </li>
-  </ul>
-
-        </div>
-        <div className="widget">
-          <h3>Latest Posts</h3>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>This is my first post!</td>
-                <td>John Doe</td>
-                <td>2023-10-10</td>
-              </tr>
-              <tr>
-                <td>This is my second post!</td>
-                <td>Jane Doe</td>
-                <td>2023-10-11</td>
-              </tr>
-            </tbody>
-          </table>
+          </div>
+          
         </div>
       </div>
-    </div>
-  </div>
 
-    )
+
+      <div className='chart'>
+
+        <MyChart />
+      </div>
+
+    </div>
+
+  </>
+  )
 
 }
 

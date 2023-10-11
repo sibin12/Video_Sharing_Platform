@@ -135,10 +135,10 @@ function Menu( {darkMode , setDarkMode} ) {
                 </Item>
                     </Link>
                     <Hr />
-                <Item>    
+                {/* <Item>    
                     <SettingsIcon /> Setting
                 </Item>
-                    <Hr />
+                    <Hr /> */}
                 {/* <Item onClick={(e)=> setDarkMode(!darkMode)}>    
                     <SettingsBrightnessIcon />{darkMode ? "Light": "Dark"} Mode
                 </Item>

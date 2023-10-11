@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema({
     },
     image: {
         type: String,
+        default: "default-user-image.jpg"
+    },
+    coverImage:{
+        type: String,
+        default:"default-cover-image.png"
     },
     subscribers:{
          type:Number,
@@ -30,6 +35,10 @@ const UserSchema = new mongoose.Schema({
         default:true,
     },
     fromGoogle:{
+        type:Boolean,
+        default:false,
+    },
+    isBlocked:{
         type:Boolean,
         default:false,
     }

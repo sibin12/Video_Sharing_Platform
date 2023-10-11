@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { userInstance, videoInstance } from '../../../utils/axios';
 import { toast } from 'react-toastify';
-import EditIcon from '@mui/icons-material/Edit';
-// import EditVideo from '../../../components/user/edit-video/EditVideo';
 import EditVideo from '../../../components/user/edit-video/EditVideo/'
-import { Hidden } from '@mui/material';
 import { updateUser } from '../../../redux/authSlice';
 import { validateImageFile } from '../../../utils/Validation'
 const Container = styled.div`
