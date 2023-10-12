@@ -234,7 +234,7 @@ const Profile = () => {
         <div data-fieldname="coverImage">
           <label htmlFor='cover-image'>
             <CoverPhoto src={coverImage && URL.createObjectURL(coverImage) ||
-              `http://localhost:5000/images/profile/${user?.coverImage}`
+              `https://loopnet.gadgetgalaxy.live/images/profile/${user?.coverImage}`
             }
               alt="Cover Photo" />
           </label>
@@ -253,7 +253,7 @@ const Profile = () => {
             <ProfileImage
               src={photo && URL.createObjectURL(photo) ||
 
-                `http://localhost:5000/images/profile/${user?.image}`
+                `https://loopnet.gadgetgalaxy.live/images/profile/${user?.image}`
 
               }
             />
