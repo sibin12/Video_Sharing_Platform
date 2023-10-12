@@ -99,7 +99,7 @@ function Card({type , video}) {
      <Image type={type} 
      src={video?.imgUrl} />
      <Details  type={type}>
-      <UserImage type={type} src={`http://localhost:5000/images/profile/${video?.userId?.image}`} />
+      <UserImage type={type} src={`/images/profile/${video?.userId?.image}`} />
       <Texts>
         <Title>{video?.title.substring(0,20)}</Title>
         <UserName>{video?.userId?.username}</UserName>
