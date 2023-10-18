@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Video from "../models/Video.js";
+import Comment from '../models/Comment.js'
 import { createError } from "../error.js";
 
 export const addVideo = async (req, res, next) => {
@@ -27,6 +28,36 @@ export const getVideo = async (req, res, next) => {
     next(err);
   }
 };
+
+export const editVideo = async (req,res,next) => {
+  try {
+    let videoId = req.params.id;
+  if(videoId){
+    const updatedVideo = await Video.findByIdAndUpdate(videoId, req.body, { new: true });
+    return res.status(200).json(updatedVideo)
+  }
+  } catch (error) {
+    next(error)
+  }
+  
+}
+
+export const deleteVideo = async (req,res,next) =>{
+  try {
+    let videoId = req.params.id;
+    if(videoId){
+      await Video.findByIdAndDelete({_id : videoId})
+      
+      await Comment.deleteMany({videoId : videoId})
+
+      res.status(200).json({ message: 'Video and associated comments deleted successfully.' });
+    }else{
+      res.status(400).json({ error: 'VideoId is missing in the request.' });
+    }
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const addView = async (req, res, next) => {
   let id = req.body.userId;

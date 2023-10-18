@@ -6,6 +6,7 @@ import { userInstance, videoInstance } from '../../../utils/axios';
 import { toast } from 'react-toastify';
 import { updateUser } from '../../../redux/authSlice';
 import { validateImageFile } from '../../../utils/Validation'
+import EditVideo from '../../../components/user/modals/editVideo';
 const Container = styled.div`
 
 @media (max-width: 484px) {
@@ -92,7 +93,7 @@ width:70vw;
 `;
 
 
-const tableContainer =styled.div`
+const TableContainer = styled.div`
  overflow:auto;
  `
 
@@ -227,6 +228,22 @@ const Profile = () => {
     setVideoOpen(videoId)
   }
 
+  // callback function to update the video details.
+  const updateVideo = (newData) => {
+    if(newData.delete){
+         const updatedVideos = videos.filter((video)=>
+         video._id != newData.delete._id 
+         )
+         setVideos(updatedVideos)
+    }else{
+      const updatedVideos = videos.map((video) =>
+      video._id == newData._id ? { ...newData } : video
+    );
+    setVideos(updatedVideos);
+    }
+    
+  };
+
   return (
     < Container style={{ marginLeft: toggle ? '200px' : '60px' }} >
       <ProfileContainer>
@@ -234,7 +251,7 @@ const Profile = () => {
         <div data-fieldname="coverImage">
           <label htmlFor='cover-image'>
             <CoverPhoto src={coverImage && URL.createObjectURL(coverImage) ||
-              `https://loopnet.gadgetgalaxy.live/images/profile/${user?.coverImage}`
+              `http://localhost:5000/images/profile/${user?.coverImage}`
             }
               alt="Cover Photo" />
           </label>
@@ -253,7 +270,7 @@ const Profile = () => {
             <ProfileImage
               src={photo && URL.createObjectURL(photo) ||
 
-                `https://loopnet.gadgetgalaxy.live/images/profile/${user?.image}`
+                `http://localhost:5000/images/profile/${user?.image}`
 
               }
             />
@@ -269,7 +286,7 @@ const Profile = () => {
 
 
         <UserName>
-          {user?.username} <BorderColorIcon  onClick={()=>toast.info("currently you cann't edit🤖")}/>
+          {user?.username} <BorderColorIcon onClick={() => toast.info("currently you cann't edit🤖")} />
         </UserName>
         <UserBio>subscribers: {user?.subscribers}</UserBio>
       </ProfileContainer>
@@ -293,79 +310,81 @@ const Profile = () => {
         </NavItem>
       </NavBar>
       <Hr />
-  <tableContainer>
+      <TableContainer>
 
-      {/* Render videos in a table */}
-      {selectedTab === 'uploaded' && (
+        {/* Render videos in a table */}
+        {selectedTab === 'uploaded' && (
 
-        <VideosTable>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>Videos</TableHeaderCell>
-              <TableHeaderCell>Title</TableHeaderCell>
-              {/* <TableVisible> */}
+          <VideosTable>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Videos</TableHeaderCell>
+                <TableHeaderCell>Title</TableHeaderCell>
+                {/* <TableVisible> */}
                 <TableHeaderCell>desc</TableHeaderCell>
                 <TableHeaderCell>Views</TableHeaderCell>
                 <TableHeaderCell>Likes</TableHeaderCell>
                 <TableHeaderCell>Dislikes</TableHeaderCell>
-              {/* </TableVisible> */}
-            </TableRow>
-          </TableHeader>
-          <tbody>
-            {videos.map((video, index) => (
-              <TableRow key={index} 
-              // onClick={() => handleVideos(video?._id)}
-              >
-              <TableCell> <VideosDisplay src={video?.imgUrl} /> </TableCell>
-                <TableCell>{video?.title}</TableCell>
-                {/* <TableVisible> */}
+                <TableHeaderCell>Actions</TableHeaderCell>
+                {/* </TableVisible> */}
+              </TableRow>
+            </TableHeader>
+            <tbody>
+              {videos.map((video, index) => (
+                <TableRow key={index}
+                // onClick={() => handleVideos(video?._id)}
+                >
+                  <TableCell> <VideosDisplay src={video?.imgUrl} /> </TableCell>
+                  <TableCell>{video?.title}</TableCell>
+                  {/* <TableVisible> */}
                   <TableCell>{video?.desc.slice(0, 17)}..</TableCell>
                   <TableCell>{video?.views?.length}</TableCell>
                   <TableCell>{video?.likes?.length}</TableCell>
                   <TableCell>{video?.dislikes?.length}</TableCell>
+                  <TableCell>< EditVideo video={video} updateVideo={updateVideo} /></TableCell>
+                  {/* </TableVisible> */}
+
+                </TableRow>
+              ))}
+            </tbody>
+          </VideosTable>
+        )}
+
+        {selectedTab === 'saved' && (
+
+          <VideosTable>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Videos</TableHeaderCell>
+                <TableHeaderCell>Title</TableHeaderCell>
+                {/* <TableVisible> */}
+                <TableHeaderCell>desc</TableHeaderCell>
+                <TableHeaderCell>Views</TableHeaderCell>
+                <TableHeaderCell>Likes</TableHeaderCell>
+                <TableHeaderCell>Dislikes</TableHeaderCell>
                 {/* </TableVisible> */}
-
               </TableRow>
-            ))}
-          </tbody>
-        </VideosTable>
-)}
+            </TableHeader>
+            <tbody>
+              {videos.map((video, index) => (
+                <TableRow key={index}
+                  onClick={() => handleVideos(video?._id)}
+                >
+                  <TableCell> <VideosDisplay src={video?.imgUrl} /> </TableCell>
+                  <TableCell>{video?.title}</TableCell>
+                  {/* <TableVisible> */}
+                  <TableCell>{video?.desc.slice(0, 17)}..</TableCell>
+                  <TableCell>{video?.views?.length}</TableCell>
+                  <TableCell>{video?.likes?.length}</TableCell>
+                  <TableCell>{video?.dislikes?.length}</TableCell>
+                  {/* </TableVisible> */}
 
-{selectedTab === 'saved' && (
-
-<VideosTable>
-  <TableHeader>
-    <TableRow>
-      <TableHeaderCell>Videos</TableHeaderCell>
-      <TableHeaderCell>Title</TableHeaderCell>
-      {/* <TableVisible> */}
-        <TableHeaderCell>desc</TableHeaderCell>
-        <TableHeaderCell>Views</TableHeaderCell>
-        <TableHeaderCell>Likes</TableHeaderCell>
-        <TableHeaderCell>Dislikes</TableHeaderCell>
-      {/* </TableVisible> */}
-    </TableRow>
-  </TableHeader>
-  <tbody>
-    {videos.map((video, index) => (
-      <TableRow key={index} 
-      onClick={() => handleVideos(video?._id)}
-      >
-      <TableCell> <VideosDisplay src={video?.imgUrl} /> </TableCell>
-        <TableCell>{video?.title}</TableCell>
-        {/* <TableVisible> */}
-          <TableCell>{video?.desc.slice(0, 17)}..</TableCell>
-          <TableCell>{video?.views?.length}</TableCell>
-          <TableCell>{video?.likes?.length}</TableCell>
-          <TableCell>{video?.dislikes?.length}</TableCell>
-        {/* </TableVisible> */}
-
-      </TableRow>
-    ))}
-  </tbody>
-</VideosTable>
-)}
-</tableContainer>
+                </TableRow>
+              ))}
+            </tbody>
+          </VideosTable>
+        )}
+      </TableContainer>
       {videoOpen && (<EditVideo setOpen={videoOpen} />)}
     </Container>
   );

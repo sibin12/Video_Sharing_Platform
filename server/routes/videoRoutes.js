@@ -1,5 +1,5 @@
 import express from "express";
-import { addVideo, addView, getByTag, getVideo, random, search, reportVideo ,findVideos, sub, trend} from "../controllers/videoController.js";
+import { addVideo, addView, getByTag, getVideo, random, search, reportVideo ,findVideos, sub, trend, editVideo, deleteVideo} from "../controllers/videoController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 
 const router = express.Router();
@@ -10,6 +10,10 @@ router.post("/", verifyToken, addVideo)
 router.post('/report',verifyToken, reportVideo)
 
 router.get("/find/:id", getVideo)
+
+router.put('/:id',verifyToken ,editVideo)
+
+router.delete('/:id',verifyToken, deleteVideo)
 
 router.put("/view/:id", addView)
 
