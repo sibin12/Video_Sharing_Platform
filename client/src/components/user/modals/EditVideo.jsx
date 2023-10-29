@@ -79,7 +79,7 @@ const EditVideo = ({ video, updateVideo }) => {
 
     
     const handleSave = () => {
-        videoInstance.put(`/${editedVideo?._id}`, editedVideo)
+        videoInstance.put(`/edit/${editedVideo?._id}`, editedVideo)
             .then((response) => {
                 if (response.status === 200) {
                     toast.success("Video data saved successfully");

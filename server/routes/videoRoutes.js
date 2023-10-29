@@ -11,7 +11,7 @@ router.post('/report',verifyToken, reportVideo)
 
 router.get("/find/:id", getVideo)
 
-router.put('/:id',verifyToken ,editVideo)
+router.put('/edit/:id',verifyToken ,editVideo)
 
 router.delete('/:id',verifyToken, deleteVideo)
 
