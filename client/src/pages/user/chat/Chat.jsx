@@ -269,7 +269,7 @@ function Chat({ fetchAgain }) {
                   <>
                    
                     <UserImage
-                      src={`https://loopnet.gadgetgalaxy.live/images/profile/${getSenderImage(loggedUser,chat?.users)}`}
+                      src={`http://localhost:5000/images/profile/${getSenderImage(loggedUser,chat?.users)}`}
                       alt={`http://localhost:5000/images/profile/${getSenderImage(loggedUser,chat?.users)}`} />
 
                     <Username> {getSender(loggedUser, chat?.users) }</Username>
@@ -291,7 +291,7 @@ function Chat({ fetchAgain }) {
     {!selectedChat.isGroupChat ? (
       <>
         <UserImage
-          src={`https://loopnet.gadgetgalaxy.live/images/profile/${selectedChat?.users[0]?.image}`}
+          src={`http://localhost:5000/images/profile/${selectedChat?.users[0]?.image}`}
           
           alt={selectedChat?.users[0]?.username}
           />

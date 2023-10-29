@@ -202,10 +202,13 @@ function Comment({ comment, setComments ,videoId }) {
     <Container>
       <Wrapper >
 
-        {userName?.image ?
-          <Avatar src={userName?.image} />
-          :
-          <Avatar src='https://www.pngmart.com/files/22/Spiral-PNG-Photo.png' />
+        {userName?.image  && 
+          <Avatar
+  src={
+    `https://localhost:5000/images/profile/${userName?.image}` ||
+    'https://www.pngmart.com/files/22/Spiral-PNG-Photo.png'
+  }
+/>
         }
         <Details>
           <Name>{userName?.username}</Name> <Date> {format(comment?.createdAt)}</Date>
