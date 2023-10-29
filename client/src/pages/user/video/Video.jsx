@@ -218,7 +218,7 @@ function Video() {
   };
 
   const handleCopyLink = () => {
-    var url = `http://localhost:3000/video/${currentVideo?._id}`
+    var url = `https://loopnet.gadgetgalaxy.live/video/${currentVideo?._id}`
     navigator.clipboard.writeText(url)
       .then(() => {
         toast.success("Link Copied to Clipboard")
@@ -232,7 +232,7 @@ function Video() {
 
   const handleShareOnSocialMedia = (platform) => {
     // Initialize the Facebook SDK (replace 'YOUR_APP_ID' with your App ID)
-    var url = `http://localhost:3000/video/${currentVideo?._id}`
+    var url = `https://loopnet.gadgetgalaxy.live/video/${currentVideo?._id}`
 
     window.FB.init({
       appId: '',

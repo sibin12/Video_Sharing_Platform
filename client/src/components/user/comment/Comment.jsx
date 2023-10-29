@@ -167,20 +167,21 @@ function Comment({ comment, setComments ,videoId }) {
       return toast.error("write your reply")
     }
     commentInstance.post('/reply', { replyText, user, videoId, commentId })
-      .then((replyResponse) => {
-        console.log(replyResponse.data, "add comment reply");
-        // setComments(prev => {
-        //   return prev.map(comment => {
-        //     if(comment._id === commentId){
-        //       return comment.replies = replyResponse.data.replies
-        //     }
-        //     return comment
-        //   })
-        // })
-        // console.log(comment, "😍😍😍😍😍😍😍😍")
-        // setComments([...replyResponse.data.replies])
-        // setReplyState(true)
-        setReplyText('');
+    .then((replyResponse) => {
+      setComments(prev => {
+        return prev.map(comment => {
+          if (comment._id === commentId) {
+            // Updating the replies for the matching comment
+            return {
+              ...comment,
+              replies: replyResponse.data.replies
+            };
+          }
+          return comment;
+        });
+      })
+      setReplyState(true)
+      setReplyText('');
       })
       .catch((err) => {
         console.log(err.message);
@@ -205,7 +206,7 @@ function Comment({ comment, setComments ,videoId }) {
         {userName?.image  && 
           <Avatar
   src={
-    `https://localhost:5000/images/profile/${userName?.image}` ||
+    `http://localhost:5000/images/profile/${userName?.image}` ||
     'https://www.pngmart.com/files/22/Spiral-PNG-Photo.png'
   }
 />
