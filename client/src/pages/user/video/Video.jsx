@@ -195,13 +195,21 @@ function Video() {
       })
   }, [path, dispatch, block])
 
+  const LoginCheck = async()=>{
+    if(!user){
+      toast.info("Please Login to interact!")
+    }
+  }
+
   const handleLike = async () => {
+    LoginCheck();
     await userInstance.put(`/like/${currentVideo._id}`)
 
     dispatch(like(user._id))
   }
 
   const handleDislike = async () => {
+    LoginCheck();
     await userInstance.put(`/dislike/${currentVideo._id}`)
     dispatch(dislike(user._id))
   }
@@ -254,7 +262,8 @@ function Video() {
   // handling subscription ,,
 
   const handleSubscribe = () => {
-    
+    LoginCheck();
+
  
     console.log(user?.subscribedUser, "userName?._Diid", currentVideo?.userId?._id);
     user?.subscribedUser?.includes(currentVideo?.userId?._id)
@@ -269,6 +278,7 @@ function Video() {
 
 
   const handleReport = () => {
+    LoginCheck();
     setReportModal(!reportModal)
   }
 
@@ -282,7 +292,7 @@ function Video() {
         </VideoWrapper>
         <Title>{currentVideo?.title}</Title>
         <Details>
-          <Info>{currentVideo?.views?.length}views   {format(currentVideo?.createdAt)}</Info>
+          <Info>{currentVideo?.views?.length} views   {format(currentVideo?.createdAt)}</Info>
           <Buttons>
             <Button onClick={handleLike}>
               {currentVideo?.likes?.includes(user?._id) ? (
@@ -301,6 +311,12 @@ function Video() {
               Dislike
             </Button>
             {/* <Button><LibraryAddIcon /> Save </Button> */}
+{currentVideo?.userId?._id !== user?._id &&
+(
+  <Button onClick={handleReport}><FlagIcon /> Report </Button>
+
+)
+}
             <Button onClick={handleReport}><FlagIcon /> Report </Button>
             {reportModal && <VideoReportButton videoId={currentVideo._id} />}
             <Button onClick={handleShareClick}><ShareIcon /> Share </Button>
@@ -325,7 +341,7 @@ function Video() {
             <Image src={`http://localhost:5000/images/profile/${currentVideo?.userId?.image}`} />
             <UserDetail>
               <UserName>{currentVideo?.userId?.username}</UserName>
-              <UserCounter>{currentVideo?.userId?.subscribers}subscribers</UserCounter>
+              <UserCounter>{currentVideo?.userId?.subscribers} subscribers</UserCounter>
             </UserDetail>
             {currentVideo?.userId?._id !== user?._id && (
               <Subscribe onClick={handleSubscribe}
